@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <head>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
+        <?php echo $this->tag->getTitle(); ?>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+        
+        <!-- Bootstrap CSS Admin-->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>plugins/bootstrap/css/bootstrap.min.css">
+        <!-- FortAwesome -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>plugins/FortAwesome/css/font-awesome.min.css">
+        
+        <!-- Custom CSS Admin -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>min/index.php?g=cssAdmin&rev=<?php echo $this->setting->global->cssAdminRev; ?>">
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>css/admin/admin.css">
+
+        <!-- Jquery -->
+        <script src="<?php echo $this->config->application->baseUri; ?>js/jquery.min.js"></script>
+        <!-- Bootstrap Admin-->
+        <script type="text/javascript" src="<?php echo $this->config->application->baseUri; ?>plugins/bootstrap/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+            var rooturl = "<?php echo $this->config->application->baseUri; ?>";
+            var rooturl_admin = "<?php echo $this->config->application->baseUriAdmin; ?>";
+        </script>
+    </head>
+    
+    <body>
+   
+    
+    <div class="container-fluid" id="wrapper">
+
+            <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a class="dropdown-toggle account-overview-header" data-toggle="dropdown" href="#">
+                    <div class="header-gravatar">
+                        <img src="<?php echo $this->session->get('me')->getSmallImage(); ?>" class="ico ico-header-gravatar">
+                    </div>
+                    <div class="account-overview-user-details">
+                      <p class="account-overview-shop-name"><?php echo $this->session->get('me')->name; ?></p>
+                      <p class="account-overview-user-name">
+                          <span class="label label-<?php echo $this->session->get('me')->getRoleLabel(); ?>"><?php echo $this->session->get('me')->getRoleName(); ?></span>
+                          <span class="caret"></span>
+                      </p>
+                    </div>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>profile/changepassword"><i class="fa fa-key"></i>&nbsp; Change Password</a></li>
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>profile"><i class="fa fa-user"></i>&nbsp;  Profile</a></li>
+                    <li class="divider" style="background-color:#333;"></li>
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>logout"><i class="fa fa-sign-out"></i>&nbsp; Sign Out</a></li>
+                </ul>
+            </li>
+
+            <h2>ADMINISTRATOR</h2>
+            <li id="menu_dashboard">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>dashboard">Dashboard</a>
+            </li>
+            <li id="menu_generator">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>generator">Code Generator</a>
+            </li>
+            <li id="menu_user">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>user">User List</a>
+            </li>
+            <li id="menu_crontask">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask">Cron Task</a>
+            </li>
+            <li id="menu_logs">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>logs">Logs</a>
+            </li>
+        </ul>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+      
+    <!-- Page Content -->
+        <div id="page-content-wrapper">
+        
+
+    
+    <div class="header-row">
+        <div class="header-row-wrapper">
+            <header>
+                <h1 class="header-main" id="page-header" rel="menu_crontask">
+                    <a href="javascript:void(0)" id="menu-toggle" style="color:#333;"><i class="fa fa-clock-o"></i></a>
+                    <a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask" style="color:#333;"><?php echo $this->lang->_('IndexTitle'); ?></a> (<span class="delete-decrease-count"><?php if ($page->total_items > 0) { ?><?php echo $page->total_items; ?><?php } else { ?>0<?php } ?></span>)
+                </h1>
+
+                <div class="header-right">
+                    <div class="formfilterpaginatorwrapper pull-right">
+                        <?php if (isset($page->items) && $page->total_pages > 1) { ?>
+                            <!-- start paginator -->
+                            
+    <ul class="pagination">
+        <?php $mid_range = 7; ?>
+
+        <?php if ($page->total_pages > 10) { ?>
+            <?php if ($page->current != 1 && $page->total_items >= 10) { ?>
+                <?php $pageString = '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $page->before, '&laquo') . '</li>'; ?>
+            <?php } else { ?>
+                <?php $pageString = '<li style="display:none">' . $this->tag->linkto('#', '&laquo') . '</li>'; ?>
+            <?php } ?>
+
+            <?php $start_range = $page->current - floor(($mid_range / 2)); ?>
+            <?php $end_range = $page->current + floor(($mid_range / 2)); ?>
+
+            <?php if ($start_range <= 0) { ?>
+                <?php $end_range = $end_range + abs(($start_range)) + 1; ?>
+                <?php $start_range = 1; ?>
+            <?php } ?>
+
+            <?php if ($end_range > $page->total_pages) { ?>
+                <?php $start_range = $start_range - ($end_range - $page->total_pages); ?>
+                <?php $end_range = $page->total_pages; ?>
+            <?php } ?>
+
+            <?php $range = range($start_range, $end_range); ?>
+
+            <?php foreach (range(1, $page->total_pages) as $i) { ?>
+                <?php if ($range[0] > 2 && $i == $range[0]) { ?>
+                    <?php $pageString = $pageString . '<li><a> ... </a></li>'; ?>
+                <?php } ?>
+
+                <?php if ($this->isIncluded($i == 1 || $i == $page->total_pages || $i, $range)) { ?>    
+                    <?php if ($i == $page->current) { ?>
+                        <?php $pageString = $pageString . '<li class="active">' . $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i) . '</li>'; ?>
+                    <?php } else { ?>
+                        <?php $pageString = $pageString . '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i) . '</li>'; ?>
+                    <?php } ?>
+                <?php } ?>
+
+                
+                <?php if ($range[$mid_range - 1] < ($page->total_pages - 1) && $i == $range[$mid_range - 1]) { ?>
+                    <?php $pageString = $pageString . '<li><a> ... </a></li>'; ?>
+                <?php } ?>
+                
+            <?php } ?>
+            
+            <?php if ($page->current != $page->total_pages && $page->total_items >= 10) { ?>
+                <?php $pageString = $pageString . '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $page->next, '&raquo') . '</li>'; ?>
+            <?php } else { ?>
+                <?php $pageString = $pageString . '<li style="display:none">' . $this->tag->linkto('#', '&raquo') . '</li>'; ?>
+            <?php } ?>
+            
+            <?php echo $pageString; ?>
+            
+        <?php } else { ?>
+        
+            <?php if ($page->current != 1) { ?>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=1', 'First'); ?></li>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->before, '&laquo'); ?></li>
+            <?php } ?>
+
+            <?php foreach (range(1, $page->total_pages) as $i) { ?>
+                <li <?php if ($i == $page->current) { ?>class="active"<?php } ?>><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i); ?></li>
+            <?php } ?>
+
+            <?php if ($page->current != $page->total_pages) { ?>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->next, '&raquo'); ?></li>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->last, 'Last'); ?></li>
+            <?php } ?>
+        <?php } ?>
+
+        
+    </ul>
+
+                           <!-- end paginator -->
+                       <?php } ?>
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+
+    <?php echo $this->getContent(); ?>
+    <?php echo $this->flashSession->output(); ?>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#index-listing" role="tab" data-toggle="tab"><?php echo $this->lang->_('TabListing'); ?></a></li>
+        <li style="width:80%; margin-left:2px; margin-top:4px;" class="pull-right">
+            <div class="row">
+                <!-- Search field -->
+                <div class="col-md-4 col-xs-6 pull-right">
+                    <div class="input-group">
+                        <input type="text" id="keyword" class="form-control input-sm" placeholder="Search in Task, Action ... " value="<?php if (isset($formData['keyword'])) { ?><?php echo $formData['keyword']; ?><?php } ?>" style="font-size:13px;"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default input-sm" onclick="gosearch()" /><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="index-listing">
+        <form method="post" action="" onsubmit="return confirm('Are You Sure ?');">
+        	<input type="hidden" name="searchurl" id="searchurl" value="<?php echo $this->config->application->baseUriAdmin; ?>crontask" />
+            <input type="hidden" name="<?php echo $this->security->getTokenKey(); ?>" value="<?php echo $this->security->getToken(); ?>" />
+            <table class="table table-hover" style="margin-top:10px">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" class="check-all"/></th>
+					<th id="id"><?php echo $this->lang->_('LabelId'); ?></th>
+					<th id="task"><?php echo $this->lang->_('LabelTask'); ?></th>
+					<th id="action"><?php echo $this->lang->_('LabelAction'); ?></th>
+					<th id="ipaddress"><?php echo $this->lang->_('LabelIpaddress'); ?></th>
+					<th id="timeprocessing"><a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask?sortby=timeprocessing&sorttype=<?php if (Phalcon\Text::upper($formData['sorttype']) == 'DESC') { ?>ASC<?php } else { ?>DESC<?php } ?><?php if (isset($formData['keyword'])) { ?>&keyword=<?php echo $formData['keyword']; ?><?php } ?>"><?php echo $this->lang->_('LabelTimeprocessing'); ?></a></th>
+					<th id="output"><?php echo $this->lang->_('LabelOutput'); ?></th>
+					<th id="status"><a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask?sortby=status&sorttype=<?php if (Phalcon\Text::upper($formData['sorttype']) == 'DESC') { ?>ASC<?php } else { ?>DESC<?php } ?><?php if (isset($formData['keyword'])) { ?>&keyword=<?php echo $formData['keyword']; ?><?php } ?>"><?php echo $this->lang->_('LabelStatus'); ?></a></th>
+					<th id="created_at"><a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask?sortby=createdat&sorttype=<?php if (Phalcon\Text::upper($formData['sorttype']) == 'DESC') { ?>ASC<?php } else { ?>DESC<?php } ?><?php if (isset($formData['keyword'])) { ?>&keyword=<?php echo $formData['keyword']; ?><?php } ?>"><?php echo $this->lang->_('LabelCreatedat'); ?></a></th>
+					<th width="100"></th>
+
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+
+                        <div class="bulk-actions align-left">
+                            <select name="fbulkaction">
+                                <option value="">---- Select Action ----</option>
+                                <option value="delete">Delete</option>
+                            </select>
+                            <input type="submit" name="fsubmitbulk" class="btn btn-default btn-sm" value="Submit" />
+                        </div>
+
+                        <div class="clear"></div>
+                    </td>
+                </tr>
+            </tfoot>
+            <tbody>
+                <?php if ($page->items->count() > 0) { ?>
+                <?php foreach ($page->items as $item) { ?>
+                    <tr>
+                        <td><input type="checkbox" name="fbulkid[]" value="<?php echo $item->id; ?>" <?php if (isset($formData['fbulkid'])) { ?><?php foreach ($formData['fbulkid'] as $key => $value) { if ($value == $item->id) { ?>checked="checked"<?php } ?><?php } ?><?php } ?> /></td>
+                        <td><?php echo $item->id; ?></td>
+                        <td><span class="label label-primary"><?php echo $this->escaper->escapeHtml($item->task); ?></span></td>
+                        <td><?php echo $this->escaper->escapeHtml($item->action); ?></td>
+                        <td><code><?php echo $this->escaper->escapeHtml($item->ipaddress); ?></code></td>
+                        <td><?php echo $item->timeprocessing; ?></td>
+                        <td><?php echo $this->escaper->escapeHtml($item->output); ?></td>
+                        <td>
+                            <span class="label label-<?php echo $item->getStatusLabel(); ?>">
+                                <?php echo Phalcon\Text::upper($item->getStatusName()); ?>
+                            </span>
+                        </td>
+                        <td><?php echo $item->created_at; ?></td>
+                        <td>
+                            <div class="btn-group pull-right">
+                                <a href="javascript:delm('<?php echo $this->config->application->baseUriAdmin; ?>crontask/delete/<?php echo $item->id; ?>/<?php echo $redirectUrl; ?>');" class="btn btn-default btn-xs"><i class="fa fa-trash-o"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php } ?>
+                <?php } else { ?>
+                <tr>
+                    <td colspan="9"> Data Notfound!</td>
+                </tr>
+                <?php } ?>
+
+            </tbody>
+            </table>
+        </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function gosearch()
+        {
+        	var path = $('#searchurl').val();
+
+            var keyword = $("#keyword").val();
+            if(keyword.length > 0)
+            {
+                path += "?keyword=" + keyword;
+            }
+
+            document.location.href= path;
+        }
+    </script>
+
+
+
+
+        
+        <!-- Custom JS Admin -->
+        <script type="text/javascript" src="<?php echo $this->config->application->baseUri; ?>min/index.php?g=jsAdmin&rev=<?php echo $this->setting->global->jsAdminRev; ?>"></script>     
+        
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div> <!-- end Fluid -->
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+    </body>
+
+</html>

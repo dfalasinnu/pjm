@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <head>
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1' name='viewport' />
+        <?php echo $this->tag->getTitle(); ?>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+        
+        <!-- Bootstrap CSS Admin-->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>plugins/bootstrap/css/bootstrap.min.css">
+        <!-- FortAwesome -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>plugins/FortAwesome/css/font-awesome.min.css">
+        
+        <!-- Custom CSS Admin -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>min/index.php?g=cssAdmin&rev=<?php echo $this->setting->global->cssAdminRev; ?>">
+
+        <link rel="stylesheet" type="text/css" href="<?php echo $this->config->application->baseUri; ?>css/admin/admin.css">
+
+        <!-- Jquery -->
+        <script src="<?php echo $this->config->application->baseUri; ?>js/jquery.min.js"></script>
+        <!-- Bootstrap Admin-->
+        <script type="text/javascript" src="<?php echo $this->config->application->baseUri; ?>plugins/bootstrap/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+            var rooturl = "<?php echo $this->config->application->baseUri; ?>";
+            var rooturl_admin = "<?php echo $this->config->application->baseUriAdmin; ?>";
+        </script>
+    </head>
+    
+    <body>
+   
+    
+    <div class="container-fluid" id="wrapper">
+
+            <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a class="dropdown-toggle account-overview-header" data-toggle="dropdown" href="#">
+                    <div class="header-gravatar">
+                        <img src="<?php echo $this->session->get('me')->getSmallImage(); ?>" class="ico ico-header-gravatar">
+                    </div>
+                    <div class="account-overview-user-details">
+                      <p class="account-overview-shop-name"><?php echo $this->session->get('me')->name; ?></p>
+                      <p class="account-overview-user-name">
+                          <span class="label label-<?php echo $this->session->get('me')->getRoleLabel(); ?>"><?php echo $this->session->get('me')->getRoleName(); ?></span>
+                          <span class="caret"></span>
+                      </p>
+                    </div>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>profile/changepassword"><i class="fa fa-key"></i>&nbsp; Change Password</a></li>
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>profile"><i class="fa fa-user"></i>&nbsp;  Profile</a></li>
+                    <li class="divider" style="background-color:#333;"></li>
+                    <li><a href="<?php echo $this->config->application->baseUriAdmin; ?>logout"><i class="fa fa-sign-out"></i>&nbsp; Sign Out</a></li>
+                </ul>
+            </li>
+
+            <h2>ADMINISTRATOR</h2>
+            <li id="menu_dashboard">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>dashboard">Dashboard</a>
+            </li>
+            <li id="menu_generator">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>generator">Code Generator</a>
+            </li>
+            <li id="menu_user">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>user">User List</a>
+            </li>
+            <li id="menu_crontask">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>crontask">Cron Task</a>
+            </li>
+            <li id="menu_logs">
+                <a href="<?php echo $this->config->application->baseUriAdmin; ?>logs">Logs</a>
+            </li>
+        </ul>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+      
+    <!-- Page Content -->
+        <div id="page-content-wrapper">
+        
+
+    
+
+    <div class="header-row">
+        <div class="header-row-wrapper">
+            <header>
+                <h1 class="header-main" id="page-header" rel="menu_generator">
+                    <a href="javascript:void(0)" id="menu-toggle" style="color:#333;"><i class="fa fa-magic"></i></a>
+                    <a href="<?php echo $this->config->application->baseUriAdmin; ?>generator" style="color:#333;">Code Generator</a>
+                </h1>
+            </header>
+        </div>
+    </div>
+
+    <?php echo $this->getContent(); ?>
+
+    <!-- Nav tabs -->
+
+    <style type="text/css">
+        .tbl_button {
+            display:block;
+            border:1px solid #ccc;
+            padding:10px;
+            background-color: #ecf0f1;
+            color: #333;
+        }
+    </style>
+    <div class="row">
+        <?php foreach ($listTables as $tblName) { if ($tblName != 'user') { ?>
+        <div class="col-xs-6 col-sm-3">
+            <a class="tbl_button" href="<?php echo $this->config->application->baseUriAdmin; ?>generator/gentable/<?php echo $tblName; ?>" style="margin-bottom:10px;"><i class="fa fa-magic"></i> &nbsp; <?php echo $tblName; ?></a> <br/>
+        </div>
+        <?php } ?><?php } ?>  
+
+    </div>
+
+        
+
+
+
+
+        
+        <!-- Custom JS Admin -->
+        <script type="text/javascript" src="<?php echo $this->config->application->baseUri; ?>min/index.php?g=jsAdmin&rev=<?php echo $this->setting->global->jsAdminRev; ?>"></script>     
+        
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div> <!-- end Fluid -->
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+    </body>
+
+</html>

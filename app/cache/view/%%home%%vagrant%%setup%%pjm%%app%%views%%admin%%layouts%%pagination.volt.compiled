@@ -1,0 +1,73 @@
+
+    <ul class="pagination">
+        <?php $mid_range = 7; ?>
+
+        <?php if ($page->total_pages > 10) { ?>
+            <?php if ($page->current != 1 && $page->total_items >= 10) { ?>
+                <?php $pageString = '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $page->before, '&laquo') . '</li>'; ?>
+            <?php } else { ?>
+                <?php $pageString = '<li style="display:none">' . $this->tag->linkto('#', '&laquo') . '</li>'; ?>
+            <?php } ?>
+
+            <?php $start_range = $page->current - floor(($mid_range / 2)); ?>
+            <?php $end_range = $page->current + floor(($mid_range / 2)); ?>
+
+            <?php if ($start_range <= 0) { ?>
+                <?php $end_range = $end_range + abs(($start_range)) + 1; ?>
+                <?php $start_range = 1; ?>
+            <?php } ?>
+
+            <?php if ($end_range > $page->total_pages) { ?>
+                <?php $start_range = $start_range - ($end_range - $page->total_pages); ?>
+                <?php $end_range = $page->total_pages; ?>
+            <?php } ?>
+
+            <?php $range = range($start_range, $end_range); ?>
+
+            <?php foreach (range(1, $page->total_pages) as $i) { ?>
+                <?php if ($range[0] > 2 && $i == $range[0]) { ?>
+                    <?php $pageString = $pageString . '<li><a> ... </a></li>'; ?>
+                <?php } ?>
+
+                <?php if ($this->isIncluded($i == 1 || $i == $page->total_pages || $i, $range)) { ?>    
+                    <?php if ($i == $page->current) { ?>
+                        <?php $pageString = $pageString . '<li class="active">' . $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i) . '</li>'; ?>
+                    <?php } else { ?>
+                        <?php $pageString = $pageString . '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i) . '</li>'; ?>
+                    <?php } ?>
+                <?php } ?>
+
+                
+                <?php if ($range[$mid_range - 1] < ($page->total_pages - 1) && $i == $range[$mid_range - 1]) { ?>
+                    <?php $pageString = $pageString . '<li><a> ... </a></li>'; ?>
+                <?php } ?>
+                
+            <?php } ?>
+            
+            <?php if ($page->current != $page->total_pages && $page->total_items >= 10) { ?>
+                <?php $pageString = $pageString . '<li>' . $this->tag->linkto('' . $paginateUrl . '&page=' . $page->next, '&raquo') . '</li>'; ?>
+            <?php } else { ?>
+                <?php $pageString = $pageString . '<li style="display:none">' . $this->tag->linkto('#', '&raquo') . '</li>'; ?>
+            <?php } ?>
+            
+            <?php echo $pageString; ?>
+            
+        <?php } else { ?>
+        
+            <?php if ($page->current != 1) { ?>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=1', 'First'); ?></li>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->before, '&laquo'); ?></li>
+            <?php } ?>
+
+            <?php foreach (range(1, $page->total_pages) as $i) { ?>
+                <li <?php if ($i == $page->current) { ?>class="active"<?php } ?>><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $i, '' . $i); ?></li>
+            <?php } ?>
+
+            <?php if ($page->current != $page->total_pages) { ?>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->next, '&raquo'); ?></li>
+                <li><?php echo $this->tag->linkto('' . $paginateUrl . '&page=' . $page->last, 'Last'); ?></li>
+            <?php } ?>
+        <?php } ?>
+
+        
+    </ul>
